@@ -1,6 +1,7 @@
 version: 2
 jobs:
-  test:
+  # Datomic test or test Datomic? Python would go one way for sure.
+  datomic-test:
     docker:
       - image: circleci/clojure:tools-deps
     environment:
@@ -8,24 +9,33 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: v1-{{ checksum "deps.edn" }}
-      - run: .circleci/deps.sh
+          key: v1-{{ checksum "datomic/deps.edn" }}
+      - run:
+          name: Install deps
+          command: clojure -A:dev:test -e 'nil'
+          working_directory: datomic
       - save_cache:
           paths:
             - ~/.m2
-          key: v1-{{ checksum "deps.edn" }}
-      - run: bin/test
+          key: v1-{{ checksum "datomic/deps.edn" }}
+      - run:
+          name: Run tests
+          command: clojure -A:test:runner
+          working_directory: datomic
 
-  lint:
+  datomic-lint:
     docker:
       - image: borkdude/clj-kondo
     steps:
       - checkout
-      - run: .circleci/lint.sh
+      - run:
+          name: Run clj-kondo
+          command: clj-kondo --lint dev dev-resources resources src test
+          working_directory: datomic
 
 workflows:
   version: 2
   integrate:
     jobs:
-      - lint
-      - test
+      - datomic-lint
+      - datomic-test
