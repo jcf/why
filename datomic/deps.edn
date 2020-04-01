@@ -25,6 +25,5 @@
   
   :test
   {:extra-paths ["test" "test-resources"]
-   :extra-deps  {eftest          {:mvn/version "0.5.9"}
-                 invetica/spec   {:mvn/version "0.5.0"}
-                 jonase/eastwood {:mvn/version "0.3.11"}}}}}
+   :extra-deps  {eftest        {:mvn/version "0.5.9"}
+                 invetica/spec {:mvn/version "0.5.0"}}}
