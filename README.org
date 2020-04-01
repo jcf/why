@@ -1,0 +1,266 @@
+#+TITLE: _why
+#+STARTUP: overview
+
+*Why* do we build software the way that we do, and what can we do with
+technology to augment our own intelligence?
+
+* TODO Introduction
+* What's in the box?
+** TODO Datomic
+:PROPERTIES:
+:header-args: :dir ./datomic
+:END:
+*** Let's connect!
+We're going to have Emacs evaluate blocks of Clojure code by sending the code to
+a running Clojure process via the venerable [[https://github.com/clojure-emacs/cider][Cider]].
+
+As the file:datomic directory already contains a working Clojure application
+that I've started from inside Emacs we can start evaluating code.
+
+In our ~user.clj~ we make some [[https://github.com/stuartsierra/component][lifecycle]] functions available. In our case we'll
+run ~com.stuartsierra.component.user-helpers/reset~ which will refresh all our
+code, and then start our nominated system.
+
+#+BEGIN_SRC clojure
+(reset)
+#+END_SRC
+
+#+RESULTS:
+: :ok
+
+Now we have access to the running system, and everything in it.
+
+*** What's this system all about?
+#+BEGIN_SRC clojure
+system
+#+END_SRC
+
+#+RESULTS:
+: #<SystemMap>
+
+Our system looks rather dull because we've overridden Clojure's ~print-method~
+implementation for all ~SystemMap~ records (or the [[https://github.com/stuartsierra/component/blob/9f9653d1d95644e3c30beadf8c8811f86758ea23/src/com/stuartsierra/component.cljc#L183-L191][Component library]] has for
+us).
+
+To see what's inside we can put the record into a map like so:
+
+#+BEGIN_SRC clojure
+(into {} system)
+#+END_SRC
+
+#+RESULTS:
+: '(:config (:datomic (:uri "datomic:mem://why-not"))  :datomic #<Datomic>)
+
+It's a tree of ~pprint-method~ calls all the way down. 🐢
+
+*** Poking at Datomic
+Before we migrate anything, before we create anything like a table or start
+talking about entities and indices let's poke around at an in-memory Datomic
+database to familiarise ourselves a little.
+
+Although we have some convenience functions in our little Datomic codebase we'll
+start from first principles (plus or minus a few billion years - hat tip to Mr.
+Sagan, and Mr. Feynman).
+
+If you take a look at file:datomic/src/why/datomic/db.clj you'll see we make use
+of some ~datomic.api~ functions to create ourselves a database using a URI.
+
+#+BEGIN_SRC clojure
+(require '[datomic.api :as d])
+(d/create-database (str "datomic:mem://" (java.util.UUID/randomUUID)))
+#+END_SRC
+
+#+RESULTS:
+: true
+
+We just created an in-memory database! From a src block in an Org file entirely
+inside Emacs. If your mind isn't blown yet you've not drank enough of the
+koolaid.
+
+With the database created (i.e. now that Datomic has set things up for us) we
+can open a connection using the idempotent ~datomic.api/connect~.
+
+#+BEGIN_SRC clojure :results pp
+(require '[datomic.api :as d])
+(let [uri (str "datomic:mem://" (java.util.UUID/randomUUID))]
+  (d/create-database uri)
+  (repeatedly 5 #(d/connect uri)))
+#+END_SRC
+
+#+RESULTS:
+: (#object[datomic.peer.LocalConnection 0x1563eacc "datomic.peer.LocalConnection@1563eacc"]
+:  #object[datomic.peer.LocalConnection 0x1563eacc "datomic.peer.LocalConnection@1563eacc"]
+:  #object[datomic.peer.LocalConnection 0x1563eacc "datomic.peer.LocalConnection@1563eacc"]
+:  #object[datomic.peer.LocalConnection 0x1563eacc "datomic.peer.LocalConnection@1563eacc"]
+:  #object[datomic.peer.LocalConnection 0x1563eacc "datomic.peer.LocalConnection@1563eacc"])
+:
+
+Notice that they're all the exact same object. Datomic handles connection
+pooling and other complexities for us.
+
+The last thing to point out before we move on is what this mysterious ~db~
+function in the examples below is. It takes a system map like the ones we've
+seen previously and navigates its way through the maps, keys, and function calls
+to ultimately return a database value from a connection to an in-memory
+database. Phew!
+
+If you're familiar with the threading macro in Clojure (which you most likely
+aren't) this is the path we're ultimately taking with a slight diversion because
+we're worried about separation of responsibilities in the codebase.
+
+#+BEGIN_SRC clojure
+(-> system :datomic :conn datomic.api/db)
+#+END_SRC
+
+*** Queries
+"But we don't have any data in the database!" exclaims the unknown student now
+rushing ahead. In fact Datomic has already created some novelty for us to
+investigate.
+
+Never one to shy away from some code we dive straight into a query!
+
+#+BEGIN_SRC clojure :results pp
+(sort
+ (d/q '[:find [?v ...]
+        :where [_ :db/ident ?v]]
+      (db system)))
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+(:db/add
+ :db/cardinality
+ :db/cas
+ :db/code
+ :db/doc
+ :db/excise
+ :db/fn
+ :db/fulltext
+ :db/ident
+ :db/index
+ :db/isComponent
+ :db/lang
+ :db/noHistory
+ :db/retract
+ :db/retractEntity
+ :db/txInstant
+ :db/unique
+ :db/valueType
+ :db.alter/attribute
+ :db.bootstrap/part
+ :db.cardinality/many
+ :db.cardinality/one
+ :db.excise/attrs
+ :db.excise/before
+ :db.excise/beforeT
+ :db.fn/cas
+ :db.fn/retractEntity
+ :db.install/attribute
+ :db.install/function
+ :db.install/partition
+ :db.install/valueType
+ :db.lang/clojure
+ :db.lang/java
+ :db.part/db
+ :db.part/tx
+ :db.part/user
+ :db.sys/partiallyIndexed
+ :db.sys/reId
+ :db.type/bigdec
+ :db.type/bigint
+ :db.type/boolean
+ :db.type/bytes
+ :db.type/double
+ :db.type/float
+ :db.type/fn
+ :db.type/instant
+ :db.type/keyword
+ :db.type/long
+ :db.type/ref
+ :db.type/string
+ :db.type/uri
+ :db.type/uuid
+ :db.unique/identity
+ :db.unique/value
+ :fressian/tag)
+
+#+end_example
+
+So there's a bit to unpick here. We'll start by focusing on the data ignoring
+any code for now.
+
+#+BEGIN_SRC clojure
+[:find [?entity ?value]
+ :in $ ?arg0 ?arg1 ?arg2
+ :where [?entity :some/attribute ?value]]
+#+END_SRC
+
+Our query data structure consists of key-value pairs represented in a vector
+(for the more learned reader who wonders if an associative form is supported the
+answer is yet. Have a red and black cookie).
+
+Knowing that this is an extended for of [[https://en.wikipedia.org/wiki/Datalog][Datalog]] is handy if you want to read
+ahead or research prior art.
+
+Most queries consist of the following three clauses:
+
+- ~:find~ to indicate what data we want back from this query
+- ~:in~ to name any parameters this query takes
+- ~:where~ to provide clauses of ~[e a v t]~ for unification
+
+Hold up what?! We've not explained unification or what those letters mean!
+Unification refers to the fact that anywhere a variable shows up it must have
+the same value. Perhaps an example will help:
+
+#+BEGIN_SRC clojure
+(def first-name->email-query
+  '[:find ?email
+    :in $ ?first-name
+    :where
+    [?e :person/first-name ?first-name]
+    [?e :person/email ?email]])
+#+END_SRC
+
+#+RESULTS:
+: #'why.datomic.dev/first-name->email-query
+
+The query above would return **every** email address for anyone with a first
+name that matches the first name you provide when executing the query.
+
+Remember that ~db~ in the snippet below is the threaded set of maps, keys, and
+functions that ultimately converts our system map into a database value using
+our Datomic connection (~(-> system :datomic :conn datomic.api/db)~).
+
+#+BEGIN_SRC clojure
+(require '[datomic.api :as d])
+(d/q first-name->email-query (db system) "Alice")
+#+END_SRC
+
+Notice we passed a database and then a string of ~"Alice"~ to ~datomic.api/q~.
+The database is bound to ~$~ inside our query, and ~"Alice"~ is bound to
+~?first-name~.
+
+For more info you can check out Datomic's own [[https://docs.datomic.com/on-prem/query.html][docs on queries]].
+
+The letters e, a, v, and t you may well have forgotten at this point. Not to
+worry. We'll expand on in the next section.
+
+*** TODO Tuple stores (e, a, v, t)
+*** TODO Unification
+** TODO Graphs and the death of REST
+** TODO Going online
+** TODO Deploying software to Kubernetes
+* Concepts
+** The ~user.clj~ convention
+There's a special file in Clojure that gets automatically loaded if and when
+it's in the right place. This is the [[file:datomic/dev/user.clj][~user.clj~]] file. The simplest tiniest
+example of a valid ~user.clj~ file would contain this:
+
+#+BEGIN_SRC clojure
+(ns user)
+#+END_SRC
+
+Inside this file you can add arbitrary code that will be read and evaluated when
+you fire up Clojure using ~clojure~. One thing to bear in mind is that this
+namespace will always be loaded so if you break something in there you won't be
+able to start a REPL, and without a REPL we are once again mere mortals.

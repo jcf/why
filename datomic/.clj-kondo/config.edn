@@ -1,0 +1,13 @@
+{:linters
+ {:unused-namespace
+  {:exclude
+   [clojure.tools.namespace.repl]}
+
+  :unused-referred-var
+  {:exclude
+   {clojure.tools.namespace.repl            [clear refresh refresh-all]
+    com.stuartsierra.component.repl         [reset start stop]
+    com.stuartsierra.component.user-helpers [dev go reset]}}}
+
+ :lint-as
+ {why.datomic.test.util/with-system clojure.core/let}}

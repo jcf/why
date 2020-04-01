@@ -1,0 +1,12 @@
+*.class
+*.jar
+/.clj-kondo/.cache
+/.cpcache
+/.lein-*
+/.nrepl-history
+/.nrepl-port
+/checkouts
+/logs
+/target
+pom.xml
+pom.xml.asc
