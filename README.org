@@ -189,6 +189,19 @@ Never one to shy away from some code we dive straight into a query!
 So there's a bit to unpick here. We'll start by focusing on the data ignoring
 any code for now.
 
+The query in the code above is this little vector filled with keywords, other
+vectors, symbols, and more keywords. Lots of Clojure's delightful scalars,
+literals, and persistent data structures for us to explore!
+
+#+BEGIN_SRC clojure
+[:find [?v ...]
+ :where [_ :db/ident ?v]]
+#+END_SRC
+
+But for now all we need do is grok the clauses that come up most frequently. If
+we add a little more pomp to our frankly anaemic query we see how things fit
+together.
+
 #+BEGIN_SRC clojure
 [:find [?entity ?value]
  :in $ ?arg0 ?arg1 ?arg2
