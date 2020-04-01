@@ -246,7 +246,7 @@ name that matches the first name you provide when executing the query.
 #+END_SRC
 
 Notice we passed a database and then a string of ~"Alice"~ to ~datomic.api/q~.
-The database is bound to ~$~ inside our query, and ~"Alice"~ is bound to
+The database value is bound to ~$~ inside our query, and ~"Alice"~ is bound to
 ~?first-name~.
 
 For more info you can check out Datomic's own [[https://docs.datomic.com/on-prem/query.html][docs on queries]].
