@@ -43,4 +43,3 @@
   [config]
   {:pre [(s/assert ::config config)]}
   (map->Datomic config))
-
