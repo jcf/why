@@ -4,6 +4,16 @@
 *Why* do we build software the way that we do, and what can we do with
 technology to augment our own intelligence?
 
+* Table of contents                                                     :TOC:
+- [[#introduction][Introduction]]
+- [[#whats-in-the-box][What's in the box?]]
+  - [[#datomic][Datomic]]
+  - [[#graphs-and-the-death-of-rest][Graphs and the death of REST]]
+  - [[#going-online][Going online]]
+  - [[#deploying-software-to-kubernetes][Deploying software to Kubernetes]]
+- [[#concepts][Concepts]]
+  - [[#the-userclj-convention][The ~user.clj~ convention]]
+
 * TODO Introduction
 * What's in the box?
 ** TODO Datomic
