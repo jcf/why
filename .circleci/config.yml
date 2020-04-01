@@ -30,7 +30,7 @@ jobs:
       - checkout
       - run:
           name: Run clj-kondo
-          command: clj-kondo --lint dev dev-resources resources src test
+          command: clj-kondo --lint dev resources src test
           working_directory: datomic
 
 workflows:
