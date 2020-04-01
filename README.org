@@ -240,10 +240,6 @@ the same value. Perhaps an example will help:
 The query above would return **every** email address for anyone with a first
 name that matches the first name you provide when executing the query.
 
-Remember that ~db~ in the snippet below is the threaded set of maps, keys, and
-functions that ultimately converts our system map into a database value using
-our Datomic connection (~(-> system :datomic :conn datomic.api/db)~).
-
 #+BEGIN_SRC clojure
 (require '[datomic.api :as d])
 (d/q first-name->email-query (db system) "Alice")
