@@ -210,7 +210,7 @@ together.
 
 Our query data structure consists of key-value pairs represented in a vector
 (for the more learned reader who wonders if an associative form is supported the
-answer is yet. Have a red and black cookie).
+answer is yes. Have a red and black cookie).
 
 Knowing that this is an extended for of [[https://en.wikipedia.org/wiki/Datalog][Datalog]] is handy if you want to read
 ahead or research prior art.
