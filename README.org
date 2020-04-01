@@ -256,6 +256,23 @@ worry. We'll expand on in the next section.
 
 *** TODO Tuple stores (e, a, v, t)
 *** TODO Unification
+*** TODO A test a day…
+We'll add a small test suite to the Datomic codebase to illustrate the value in
+the system abstraction, and Datomic's in-memory database.
+
+#+BEGIN_SRC shell :dir datomic :results output verbatim
+clojure -A:test:runner
+#+END_SRC
+
+#+RESULTS:
+:
+: Running tests in #{"test"}
+:
+: Testing why.datomic.db-test
+:
+: Ran 1 tests containing 2 assertions.
+: 0 failures, 0 errors.
+
 ** TODO Graphs and the death of REST
 ** TODO Going online
 ** TODO Deploying software to Kubernetes

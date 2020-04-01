@@ -6,6 +6,17 @@
    [io.pedestal.log :as log]))
 
 ;; -----------------------------------------------------------------------------
+;; Queries
+
+(def ^:private idents-query
+  '[:find [?v ...] :where [_ :db/ident ?v]])
+
+(def ^:private idents-with-ns-query
+  '[:find [?v ...]
+    :in $ ?ns
+    :where [_ :db/ident ?v] [(namespace ?v) ?n] [(= ?n ?ns)]])
+
+;; -----------------------------------------------------------------------------
 ;; API
 
 ;; Quack.
@@ -17,6 +28,10 @@
   [datomic]
   {:pre [(datomic? datomic)]}
   (d/db (:conn datomic)))
+
+(defn idents
+  ([db]    (into #{} (d/q idents-query         db)))
+  ([db ns] (into #{} (d/q idents-with-ns-query db ns))))
 
 ;; -----------------------------------------------------------------------------
 ;; Component
