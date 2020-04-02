@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "name": "why-graphql",
+  "description": "Why not?",
+  "version": "1.0.0",
+  "author": "James Conroy-Finn <james@invetica.co.uk>",
+  "license": "MIT",
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {
+    "hasura-cli": "^1.1.1"
+  }
+}
