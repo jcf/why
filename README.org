@@ -284,6 +284,11 @@ clojure -A:test:runner
 : 0 failures, 0 errors.
 
 ** TODO Graphs and the death of REST
+Here you can see some exploration powered by Emacs. Unfortunately, both my
+battery and my laptop's are running low so it's time to call it a night! We'll
+pick up where we left off very soon I hope.
+
+*** Docker delivers
 [[https://hasura.io/][Hasura]] and [[https://www.postgresql.org/][PostgreSQL]].
 
 We'll run everything in containers with Docker compose.
@@ -345,6 +350,20 @@ Content-Type: application/json
 #+END_SRC
 
 BOOM! We will be introducing images forthwith.
+*** Manifests aren't a reproducible panacea
+What's in this ~metadata.json~ file anyway? Let's have a look.
+
+file:graphql/metadata.json
+
+Not enough information to spin up a full environment including PostgreSQL so we
+have work to do.
+
+*** TODO Connecting to PostgreSQL
+From Emacs! Of course.
+
+#+BEGIN_SRC emacs-lisp
+(sql-postgres)
+#+END_SRC
 
 ** TODO Going online
 ** TODO Deploying software to Kubernetes
