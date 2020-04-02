@@ -284,6 +284,68 @@ clojure -A:test:runner
 : 0 failures, 0 errors.
 
 ** TODO Graphs and the death of REST
+[[https://hasura.io/][Hasura]] and [[https://www.postgresql.org/][PostgreSQL]].
+
+We'll run everything in containers with Docker compose.
+
+Make sure you have Docker running. Maybe you don't have it [[https://docs.docker.com/install/][installed]]? Once it is
+installed and running you need to install even more code written by people you
+probably don't know. Thank you kind internet stranger!
+
+To remain within Emacs as much as possible we want [[https://github.com/Silex/docker.el][docker support]] right here at
+our finger tips. Don't forget to [[https://www.youtube.com/watch?v=uPO-zST-7EE][stretch those digits!]]
+
+#+BEGIN_SRC emacs-lisp
+(package-install "docker")
+#+END_SRC
+
+With all of that lovely code brewing away in the depths of your silicon stallion
+you can bring up our GraphQL backend from inside Emacs with a pinky-punishing
+keychord.
+
+#+BEGIN_SRC emacs-lisp :dir graphql
+(docker-compose-run-docker-compose-async "up")
+#+END_SRC
+
+#+RESULTS:
+: #<window 247>
+
+To access Hasura we visit http://localhost:8080/ and enter the following admin
+secret:
+
+#+BEGIN_SRC shell
+awk '/HASURA_GRAPHQL_ADMIN_SECRET/ { print $2 }' graphql/docker-compose.yml
+#+END_SRC
+
+#+RESULTS:
+: deathtorest
+
+#+BEGIN_SRC restclient
+POST http://localhost:8080/v1/graphql
+X-Hasura-Admin-Secret: deathtorest
+Content-Type: application/json
+{"query":"query{people{uuid}}"}
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_SRC js
+{
+  "data": {
+    "people": []
+  }
+}
+// POST http://localhost:8080/v1/graphql
+// HTTP/1.1 200 OK
+// Transfer-Encoding: chunked
+// Date: Thu, 02 Apr 2020 00:02:38 GMT
+// Server: Warp/3.2.27
+// x-request-id: 622981bc-98e3-44df-a9c5-4d9e10f5f836
+// Content-Type: application/json; charset=utf-8
+// Request duration: 0.005261s
+#+END_SRC
+
+BOOM! We will be introducing images forthwith.
+
 ** TODO Going online
 ** TODO Deploying software to Kubernetes
 * Concepts
