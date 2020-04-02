@@ -284,6 +284,9 @@ clojure -A:test:runner
 : 0 failures, 0 errors.
 
 ** TODO Graphs and the death of REST
+:PROPERTIES:
+:header-args: :dir ./graphql
+:END:
 Here you can see some exploration powered by Emacs. Unfortunately, both my
 battery and my laptop's are running low so it's time to call it a night! We'll
 pick up where we left off very soon I hope.
@@ -313,7 +316,7 @@ keychord.
 #+END_SRC
 
 #+RESULTS:
-: #<window 247>
+: #<window 287>
 
 To access Hasura we visit http://localhost:8080/ and enter the following admin
 secret:
@@ -350,13 +353,76 @@ Content-Type: application/json
 #+END_SRC
 
 BOOM! We will be introducing images forthwith.
-*** Manifests aren't a reproducible panacea
-What's in this ~metadata.json~ file anyway? Let's have a look.
+*** TODO Manifests aren't a reproducible panacea
+We want reproducibility.
 
-file:graphql/metadata.json
+#+BEGIN_SRC shell :results output verbatim
+yarn install
+#+END_SRC
 
-Not enough information to spin up a full environment including PostgreSQL so we
-have work to do.
+#+RESULTS:
+: yarn install v1.22.4
+: [1/4] Resolving packages...
+: success Already up-to-date.
+: Done in 0.06s.
+
+And now we can interrogate Hasura's CLI by delving into a relatively lightweight
+~node_modules~.
+
+#+BEGIN_SRC shell
+du -hxd0 node_modules
+#+END_SRC
+
+#+RESULTS:
+| 7.8M | node_modules |
+
+#+BEGIN_SRC shell :results output verbatim
+node_modules/.bin/hasura
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+    __
+   / /_   ____ _ _____ __  __ _____ ____ _
+  / __ \ / __ `// ___// / / // ___// __ `/
+ / / / // /_/ /(__  )/ /_/ // /   / /_/ /
+/_/ /_/ \__,_//____/ \__,_//_/    \__,_/
+
+
+GraphQL commands:
+  init       Initialize directory for Hasura GraphQL Engine migrations
+  migrate    Manage migrations on the database
+  metadata   Manage Hasura GraphQL Engine metadata saved in the database
+  console    Open console to manage database and try out APIs
+
+Other commands:
+  completion   Generate auto completion code
+  version      Print the CLI version
+
+Use "hasura [command] --help" for more information about a command.
+#+end_example
+
+#+BEGIN_SRC shell :results output verbatim
+node_modules/.bin/hasura init \
+  --directory hasura \
+  --endpoint http://localhost::8080 \
+  --admin-secret deathtorest
+#+END_SRC
+
+#+RESULTS:
+: {"level":"info","msg":"directory created. execute the following commands to continue:\n\n  cd hasura\n  hasura console\n","time":"2020-04-02T21:25:42+01:00"}
+
+Now we can start a console with ~hasura console~.
+
+*** Migrations
+#+BEGIN_SRC shell :dir ./graphql/hasura
+../node_modules/.bin/hasura migrate create "init" --from-server
+#+END_SRC
+
+#+RESULTS:
+| level":"info | Creating migration files... | 2020-04-02T21:52:00+01:00 |                           |                        |
+| level":"info | Migrations files created    | init                      | 2020-04-02T21:52:00+01:00 | version:1585860720714} |
 
 *** TODO Connecting to PostgreSQL
 From Emacs! Of course.
