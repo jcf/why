@@ -428,21 +428,47 @@ connect to "INFO console running at" otherwise known as Hasura console.
  "../node_modules/.bin/hasura console")
 #+END_SRC
 
-*** Migrations
+http://localhost:9695/
+
+*** SQL -> Database
+#+BEGIN_SRC shell :dir ./graphql/hasura
+../node_modules/.bin/hasura migrate apply
+#+END_SRC
+
+*** Database -> SQL
 #+BEGIN_SRC shell :dir ./graphql/hasura
 ../node_modules/.bin/hasura migrate create "init" --from-server
 #+END_SRC
 
 #+RESULTS:
-| level":"info | Creating migration files... | 2020-04-02T21:52:00+01:00 |                           |                        |
-| level":"info | Migrations files created    | init                      | 2020-04-02T21:52:00+01:00 | version:1585860720714} |
+| level":"info | Creating migration files... | 2020-04-16T22:28:02+01:00 |                           |                        |
+| level":"info | Migrations files created    | init                      | 2020-04-16T22:28:02+01:00 | version:1587072482696} |
+
+#+BEGIN_SRC shell :export results :results output verbatim
+tree hasura
+#+END_SRC
+
+#+RESULTS:
+: hasura
+: ├── config.yaml
+: └── migrations
+:     ├── 1585860720714_init
+:     │   ├── up.sql
+:     │   └── up.yaml
+:     └── metadata.yaml
+:
+: 2 directories, 4 files
 
 *** TODO Connecting to PostgreSQL
 From Emacs! Of course.
 
-#+BEGIN_SRC emacs-lisp
-(sql-postgres)
+#+BEGIN_SRC sql :engine postgresql :dbhost localhost :dbuser me :dbpassword please :database db
+SELECT *
+FROM people;
 #+END_SRC
+
+#+RESULTS:
+|   |
 
 ** TODO Going online
 ** TODO Deploying software to Kubernetes
