@@ -321,8 +321,8 @@ you can bring up our GraphQL backend from inside Emacs with a pinky-punishing
 To access Hasura we visit http://localhost:8080/ and enter the following admin
 secret:
 
-#+BEGIN_SRC shell
-awk '/HASURA_GRAPHQL_ADMIN_SECRET/ { print $2 }' graphql/docker-compose.yml
+#+BEGIN_SRC shell :exports result
+awk '/HASURA_GRAPHQL_ADMIN_SECRET/ { print $2 }' docker-compose.yml
 #+END_SRC
 
 #+RESULTS:
