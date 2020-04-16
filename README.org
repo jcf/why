@@ -299,7 +299,7 @@ our finger tips. Don't forget to [[https://www.youtube.com/watch?v=uPO-zST-7EE][
 
 With all of that lovely code brewing away in the depths of your silicon stallion
 you can bring up our GraphQL backend from inside Emacs with a pinky-punishing
-keychord (@@html<kbd></kbd>@@).
+[[https://www.emacswiki.org/emacs/KeyChord][key chord]] (@@html<kbd>Ctrl-C</kbd>@@ @@html<<kbd>Ctrl-C</kbd>@@).
 
 #+BEGIN_SRC emacs-lisp :dir graphql
 (require 'docker-compose)
