@@ -468,7 +468,8 @@ FROM people;
 #+END_SRC
 
 #+RESULTS:
-|   |
+| uuid | name |
+|------+------|
 
 ** TODO Going online
 ** TODO Deploying software to Kubernetes
