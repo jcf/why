@@ -4,8 +4,6 @@
 [[http://localhost:8080/readme.html][*Why*]] do we build software the way that we do, and what can we do with
 technology to augment our own intelligence?
 
-* What isn't in the box!
-
 * What's in the box?
 ** Org mode
 *** httpd
