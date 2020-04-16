@@ -312,6 +312,7 @@ you can bring up our GraphQL backend from inside Emacs with a pinky-punishing
 keychord.
 
 #+BEGIN_SRC emacs-lisp :dir graphql
+(require 'docker-compose)
 (docker-compose-run-docker-compose-async "up")
 #+END_SRC
 
