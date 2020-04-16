@@ -310,6 +310,7 @@ With all of that lovely code brewing away in the depths of your silicon stallion
 you can bring up our GraphQL backend from inside Emacs with a pinky-punishing
 [[https://www.emacswiki.org/emacs/KeyChord][key chord]] (@@html<kbd>Ctrl-C</kbd>@@ @@html<<kbd>Ctrl-C</kbd>@@).
 
+**** Up
 #+BEGIN_SRC emacs-lisp :dir graphql
 (require 'docker-compose)
 (docker-compose-run-docker-compose-async "up")
@@ -353,6 +354,15 @@ Content-Type: application/json
 #+END_SRC
 
 BOOM! We will be introducing images forthwith.
+
+**** Down
+#+BEGIN_SRC emacs-lisp
+(docker-compose-run-docker-compose-async "down")
+#+END_SRC
+
+#+RESULTS:
+: #<window 67>
+
 *** TODO Manifests aren't a reproducible panacea
 We want reproducibility.
 
