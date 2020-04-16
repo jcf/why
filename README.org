@@ -418,6 +418,15 @@ node_modules/.bin/hasura init \
 : {"level":"info","msg":"directory created. execute the following commands to continue:\n\n  cd hasura\n  hasura console\n","time":"2020-04-02T21:25:42+01:00"}
 
 Now we can start a console with ~hasura console~.
+*** hasura console
+Somewhere on your dev machine you need to start a Hasura process that will
+connect to "INFO console running at" otherwise known as Hasura console.
+
+#+BEGIN_SRC emacs-lisp :dir ./graphql/hasura :results silent
+(start-process-shell-command
+ "hasura-console" "*hasura-console*"
+ "../node_modules/.bin/hasura console")
+#+END_SRC
 
 *** Migrations
 #+BEGIN_SRC shell :dir ./graphql/hasura
