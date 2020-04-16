@@ -307,7 +307,7 @@ keychord (@@html<kbd></kbd>@@).
 #+END_SRC
 
 #+RESULTS:
-: #<window 287>
+: #<window 182>
 
 To access Hasura we visit http://localhost:8080/ and enter the following admin
 secret:
