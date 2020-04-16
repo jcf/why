@@ -23,5 +23,6 @@ services:
       HASURA_GRAPHQL_DATABASE_URL: postgres://me:please@postgres:5432/db
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLE_CONSOLE: 'false' # Use the CLI
+      HASURA_GRAPHQL_ENABLE_TELEMETRY: 'false'
 volumes:
   db_data:
