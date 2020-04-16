@@ -1,0 +1,19 @@
+{:paths ["resources" "src"]
+ :deps
+ {medley               {:mvn/version "1.1.0"}
+  org.clojure/clojure  {:mvn/version "1.10.1"}
+  thheller/shadow-cljs {:mvn/version "2.8.96"}}
+ 
+ :aliases
+ {:dev
+  {:extra-paths ["dev" "dev-resources"]
+   :extra-deps
+   {com.stuartsierra/component.repl {:mvn/version "0.2.0"}
+    org.clojure/test.check          {:mvn/version "0.10.0-alpha4"}
+    org.clojure/tools.namespace     {:mvn/version "0.3.0-alpha4"}}}
+
+  :test
+  {:extra-paths ["test" "test-resources"]
+   :extra-deps
+   {eftest        {:mvn/version "0.5.7"}
+    invetica/spec {:mvn/version "0.5.0"}}}}}

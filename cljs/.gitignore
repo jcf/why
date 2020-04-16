@@ -1,0 +1,10 @@
+*.class
+*.jar
+/.cpcache
+/.nrepl-history
+/.nrepl-port
+/.shadow-cljs
+/node_modules
+/public/js
+pom.xml
+pom.xml.asc

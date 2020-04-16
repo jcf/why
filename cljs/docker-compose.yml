@@ -1,0 +1,14 @@
+version: '3.6'
+services:
+  shadow-cljs:
+    user: node
+    build: ../docker/shadow-cljs
+    command: watch app
+    working_dir: /app
+    ports:
+      # 'host:container'
+      - '4040:8080'
+      - '8777:8777'
+      - '9630:9630'
+    volumes:
+      - '.:/app'

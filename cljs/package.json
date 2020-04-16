@@ -1,0 +1,9 @@
+{
+  "name": "why.cljs",
+  "version": "1.0.0",
+  "description": "Why not?",
+  "main": "index.js",
+  "repository": "git@github.com:jcf/why.git",
+  "author": "James Conroy-Finn <git@invetica.co.uk>",
+  "private": true
+}

@@ -1,0 +1,12 @@
+{:deps true
+ :builds
+ {:app
+  {:output-dir "public/js"
+   ;; :asset-path "."
+   :target :browser
+   :modules {:app {:init-fn why.cljs.app/init}}
+   :release {:output-dir "public/js"
+             :build-options {:manifest-name "why.edn"}}
+   :devtools {:after-load why.cljs.app/reload
+              :http-root "public"
+              :http-port 3000}}}}
