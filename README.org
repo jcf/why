@@ -311,13 +311,10 @@ you can bring up our GraphQL backend from inside Emacs with a pinky-punishing
 [[https://www.emacswiki.org/emacs/KeyChord][key chord]] (@@html<kbd>Ctrl-C</kbd>@@ @@html<<kbd>Ctrl-C</kbd>@@).
 
 **** Up
-#+BEGIN_SRC emacs-lisp :dir graphql
+#+BEGIN_SRC emacs-lisp :results silent
 (require 'docker-compose)
-(docker-compose-run-docker-compose-async "up")
+(docker-compose-run-docker-compose-async "up" "--detach")
 #+END_SRC
-
-#+RESULTS:
-: #<window 182>
 
 To access Hasura we visit http://localhost:8080/ and enter the following admin
 secret:
@@ -356,12 +353,9 @@ Content-Type: application/json
 BOOM! We will be introducing images forthwith.
 
 **** Down
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 (docker-compose-run-docker-compose-async "down")
 #+END_SRC
-
-#+RESULTS:
-: #<window 67>
 
 *** TODO Manifests aren't a reproducible panacea
 We want reproducibility.
