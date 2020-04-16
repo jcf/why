@@ -1,11 +1,22 @@
 #+TITLE: _why
 #+STARTUP: content
 
-*Why* do we build software the way that we do, and what can we do with
+[[http://localhost:8080/readme.html][*Why*]] do we build software the way that we do, and what can we do with
 technology to augment our own intelligence?
 
-* TODO Introduction
+* What isn't in the box!
+
 * What's in the box?
+** Org mode
+*** httpd
+#+BEGIN_SRC emacs-lisp
+(if (httpd-running-p)
+    (httpd-stop)
+  (httpd-serve-directory default-directory))
+#+END_SRC
+
+#+RESULTS:
+
 ** TODO Datomic
 :PROPERTIES:
 :header-args: :dir ./datomic
