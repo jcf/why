@@ -422,6 +422,14 @@ Now we can start a console with ~hasura console~.
 Somewhere on your dev machine you need to start a Hasura process that will
 connect to "INFO console running at" otherwise known as Hasura console.
 
+You need to install Node stuff first!
+
+#+BEGIN_SRC shell
+yarn install
+#+END_SRC
+
+And now we can start up our Hasura console.
+
 #+BEGIN_SRC emacs-lisp :dir ./graphql/hasura :results silent
 (start-process-shell-command
  "hasura-console" "*hasura-console*"
