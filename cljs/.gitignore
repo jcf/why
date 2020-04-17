@@ -1,5 +1,6 @@
 *.class
 *.jar
+/.clj-kondo/.cache
 /.cpcache
 /.nrepl-history
 /.nrepl-port
