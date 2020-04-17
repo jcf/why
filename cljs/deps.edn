@@ -5,14 +5,12 @@
   thheller/shadow-cljs {:mvn/version "2.8.96"}
   rum                  {:git/url "https://github.com/tonsky/rum"
                         :sha     "f1652d4f82a902c7236b35812aff40ffefae31b2"}}
- 
+
  :aliases
  {:dev
   {:extra-paths ["dev" "dev-resources"]
    :extra-deps
-   {com.stuartsierra/component.repl {:mvn/version "0.2.0"}
-    org.clojure/test.check          {:mvn/version "0.10.0-alpha4"}
-    org.clojure/tools.namespace     {:mvn/version "0.3.0-alpha4"}}}
+   {org.clojure/test.check {:mvn/version "0.10.0-alpha4"}}}
 
   :test
   {:extra-paths ["test" "test-resources"]
