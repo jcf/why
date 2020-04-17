@@ -15,14 +15,25 @@
 (enable-console-print!)
 
 (defonce app-state
-  (atom {::version 0}))
+  (atom {::github-url "https://github.com/jcf/why"
+         ::version    0}))
+
+(rum/defc Home < rum/reactive
+  [app-state]
+  (let [state (rum/react app-state)]
+    (rum/fragment
+     [:h1 "Why cljs?"]
+     [:code [:pre (with-out-str (pprint state))]])))
 
 (rum/defc Router < rum/reactive
   [app-state]
-  (let [client (rum/react app-state)]
+  (let [{:keys [::github-url]} (rum/react app-state)]
     (rum/fragment
-     [:h1 "Why cljs?"]
-     [:code [:pre (pprint (js->clj client))]])))
+     [:header [:a {:href "/"} "_why"]]
+     [:main (Home app-state)]
+     [:footer
+      [:p
+       [:a {:href github-url} "GitHub"]]])))
 
 (defn- link-splitter
   [{:keys [query]}]
@@ -38,11 +49,11 @@
                                        :options {:reconnect true}})
         link      (apollo.link/split link-splitter ws-link http-link)
         client    (ApolloClient. #js {:link link :cache (InMemoryCache.)})]
-    (reset! app-state {:apollo/client client})
+    (swap! app-state assoc :apollo/client client)
     (rum/mount (Router app-state) (gdom/getElement "root"))
     (println "We're cooking!")))
 
 (defn ^:export reload
   []
   (println "Something will need to be done.")
-  (swap! app-state update :version inc))
+  (swap! app-state update ::version inc))
