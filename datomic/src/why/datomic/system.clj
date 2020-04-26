@@ -5,8 +5,6 @@
 
 (defn system
   [config]
-  (component/system-using
-   (component/system-map
-    :config config
-    :datomic (db/make-datomic (:datomic config)))
-   {}))
+  (component/system-map
+   :config config
+   :datomic (db/make-datomic (:datomic config))))
