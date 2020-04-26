@@ -7,33 +7,49 @@
    ["apollo-link-ws" :refer [WebSocketLink]]
    ["apollo-utilities" :as apollo.util]
    [clojure.pprint :refer [pprint]]
+   [clojure.spec.alpha :as s]
    [goog.dom :as gdom]
    [rum.core :as rum]))
 
 ;; Gonna regret having "cljs" in the path and extension.
 
-(enable-console-print!)
+(when goog/DEBUG
+  (enable-console-print!))
+
+(s/def :page/id #{:page.id/home})
+(s/def :page/title ifn?)
+
+(s/def ::page
+  (s/keys :req [:page/id :page/title]))
 
 (defonce app-state
   (atom {::github-url "https://github.com/jcf/why"
          ::version    0}))
 
+(rum/defc Header < rum/static
+  [_]
+  [:header [:a {:href "/"} "_why"]])
+
 (rum/defc Home < rum/reactive
   [app-state]
   (let [state (rum/react app-state)]
-    (rum/fragment
+    [:main
      [:h1 "Why cljs?"]
-     [:code [:pre (with-out-str (pprint state))]])))
+     (when goog/DEBUG
+       [:code [:pre (with-out-str (pprint state))]])]))
+
+(rum/defc Footer < rum/reactive
+  [app-state]
+  (let [{:keys [::github-url]} (rum/react app-state)]
+    [:footer
+     [:p [:a {:href github-url} "GitHub"]]]))
 
 (rum/defc Router < rum/reactive
   [app-state]
-  (let [{:keys [::github-url]} (rum/react app-state)]
-    (rum/fragment
-     [:header [:a {:href "/"} "_why"]]
-     [:main (Home app-state)]
-     [:footer
-      [:p
-       [:a {:href github-url} "GitHub"]]])))
+  (rum/fragment
+   (Header app-state)
+   (Home app-state)
+   (Footer app-state)))
 
 (defn- link-splitter
   [{:keys [query]}]
